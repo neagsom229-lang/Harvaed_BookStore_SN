@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecommer</title>
+    
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="assets/css/custom.css">
+</head>
+<body>
+    <!-- start Header -->
+   <!-- HEADER / NAVBAR -->
+<!-- ================= HEADER ================= -->
+<header>
+<nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top shadow-sm">
+  <div class="container-fluid">
+
+    <!-- Logo -->
+    <a class="navbar-brand d-flex align-items-center" href="index.html">
+      <img src="assets/image/logo/logo.png" width="80" class="me-2">
+    </a>
+
+    <!-- Mobile button -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Menu -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link active" href="index.html">ទំព័រដើម</a></li>
+        <li class="nav-item"><a class="nav-link" href="category.html">ប្រភេទទំនិញ</a></li>
+        <li class="nav-item"><a class="nav-link" href="about.html">អំពីពួកយើង</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">ទំនាក់ទំនង</a></li>
+      </ul>
+
+      <!-- Search -->
+      <form class="d-flex me-3">
+        <input id="searchInput" class="form-control me-2" type="search" placeholder="Search books...">
+        <button class="btn btn-outline-success">Search</button>
+      </form>
+
+      <!-- Cart Button -->
+      <button class="btn btn-warning position-relative" onclick="toggleCart()">
+        🛒 Cart
+        <span id="cart-count"
+          class="position-absolute top-0 start-100 translate-middle badge bg-danger">
+          0
+        </span>
+      </button>
+
+    </div>
+  </div>
+</nav>
+</header>
+
+<!-- ================= CART PANEL ================= -->
+<div id="cartBox" style="
+position: fixed;
+right: -350px;
+top: 0;
+width: 320px;
+height: 100%;
+background: #fff;
+border-left: 1px solid #ddd;
+padding: 15px;
+overflow-y: auto;
+transition: 0.3s;
+z-index: 9999;
+">
+
+<!-- Close -->
+<button onclick="toggleCart()" style="
+position: absolute;
+top: 10px;
+right: 10px;
+border: none;
+background: transparent;
+font-size: 20px;
+cursor: pointer;">
+✖
+</button>
+
+<h5>🛒 Your Cart</h5>
+
+<div id="cartItems"></div>
+
+<hr>
+
+<h6>Total: $<span id="cartTotal">0</span></h6>
+
+<button class="btn btn-success w-100 mt-2" onclick="handleBuyNow()">
+  Buy Now
+</button>
+
+</div>
+
+<!-- ================= QR PAYMENT MODAL (RESPONSIVE SMALL) ================= -->
+<div class="modal fade" id="qrModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-sm modal-dialog-scrollable">
+    <div class="modal-content border-0 shadow-sm rounded-4">
+
+      <!-- Header -->
+      <div class="modal-header py-2">
+        <h6 class="modal-title m-0">Payment Checkout</h6>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body text-center p-3">
+
+        <p class="small text-muted mb-2">Scan QR to complete payment</p>
+
+        <img src="assets/image/logo/qr.jpg"
+             class="img-fluid rounded border p-1"
+             style="max-width: 160px; width: 100%; height: auto;" />
+
+        <hr class="my-2">
+
+        <div>
+          <small class="text-muted">Total Amount</small>
+          <h5 class="text-success mb-1">
+            $<span id="finalAmount">0</span>
+          </h5>
+        </div>
+
+        <div id="paymentStatus" class="small mt-1 text-warning">
+          ⏳ Pending payment
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer py-2 justify-content-center gap-2">
+        <button class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <button class="btn btn-sm btn-success" onclick="checkPaymentStatus()">
+          I've Paid
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+  
+    <!-- End header -->
+      
+    <!-- Start content -->
+    <div id="carouselExampleFade" class="carousel slide carousel-fade">
+  <div class="carousel-inner ">
+
+    <div class="carousel-item active">
+      <img src="assets/image/banners/bann.jpg" class="d-block w-100 carousel-img" alt="banner">
+    </div>
+
+    <div class="carousel-item">
+      <img src="assets/image/banners/bann2.webp" class="d-block w-100 carousel-img" alt="banner">
+    </div>
+
+    <div class="carousel-item">
+      <img src="assets/image/banners/bann3.jpg" class="d-block w-100 carousel-img" alt="banner">
+    </div>
+
+  </div>
+
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </button>
+
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </button>
+</div>
+
+<!-- start body website -->
+<div class="container">
+
+    <!-- Categories -->
+    <h3 class="mt-5 text-center">ប្រភេទសៀវភៅ</h3>
+    <div class="row mt-4  text-center ">
+        <div class="col-4 col-md-2 mb-3">
+            <img height="200px" src="assets/image/menuBook/novel.jpeg" class="category-img">
+            <p class="mt-2 small">Novel</p>
+        </div>
+        <div class="col-4 col-md-2 mb-3">
+            <img height="200px" src="assets/image/menuBook/education.jpeg" class="category-img">
+            <p class="mt-2 small">Education</p>
+        </div>
+        <div class="col-4 col-md-2 mb-3">
+            <img height="200px" src="assets/image/menuBook/history.jpeg" class="category-img">
+            <p class="mt-2 small">History</p>
+        </div>
+        <div class="col-4 col-md-2 mb-3">
+            <img height="200px" src="assets/image/menuBook/scien.jpeg" class="category-img">
+            <p class="mt-2 small">Science</p>
+        </div>
+        <div class="col-4 col-md-2 mb-3">
+            <img height="200px" src="assets/image/menuBook/kid.jpeg" class="category-img">
+            <p class="mt-2 small">Kids</p>
+        </div>
+        <div class="col-4 col-md-2 mb-3">
+            <img height="200px" src="assets/image/menuBook/busines.jpeg" class="category-img">
+            <p class="mt-2 small">Business</p>
+        </div>
+    </div>
+
+    <!-- Top Selling Books -->
+  <h3 class="mt-5">សៀវភៅលក់ដាច់</h3>
+
+<div class="row g-3 mt-2">
+
+    <!-- 1 -->
+    <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+        <div class="card h-100">
+            <img height="270px" src="assets/image/menuBook/rich.jpeg" class="card-img-top">
+            <div class="card-body">
+                <h6>Rich Dad Poor Dad</h6>
+                <p class="text-muted small">$10.00</p>
+
+                <button class="btn btn-sm btn-primary w-100 add-to-cart"
+                    data-name="Rich Dad Poor Dad"
+                    data-price="10">
+                    Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+        <div class="card h-100">
+            <img height="270px" src="assets/image/menuBook/gramma.jpeg" class="card-img-top">
+            <div class="card-body">
+                <h6>English Grammar</h6>
+                <p class="text-muted small">$8.50</p>
+
+                <button class="btn btn-sm btn-primary w-100 add-to-cart"
+                    data-name="English Grammar"
+                    data-price="8.5">
+                    Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+        <div class="card h-100">
+            <img height="270px" src="assets/image/menuBook/world.jpeg" class="card-img-top">
+            <div class="card-body">
+                <h6>World History</h6>
+                <p class="text-muted small">$12.00</p>
+
+                <button class="btn btn-sm btn-primary w-100 add-to-cart"
+                    data-name="World History"
+                    data-price="12">
+                    Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+        <div class="card h-100">
+            <img height="270px" src="assets/image/menuBook/educate.jpeg" class="card-img-top">
+            <div class="card-body">
+                <h6>Power of Education</h6>
+                <p class="text-muted small">$7.50</p>
+
+                <button class="btn btn-sm btn-primary w-100 add-to-cart"
+                    data-name="Power of Education"
+                    data-price="7.5">
+                    Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+        <div class="card h-100">
+            <img src="assets/image/menuBook/atomic.jpeg" class="card-img-top">
+            <div class="card-body">
+                <h6>Atomic Habits</h6>
+                <p class="text-muted small">$25.00</p>
+
+                <button class="btn btn-sm btn-primary w-100 add-to-cart"
+                    data-name="Atomic Habits"
+                    data-price="25">
+                    Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+        <div class="card h-100">
+            <img height="270px" src="assets/image/menuBook/law.jpeg" class="card-img-top">
+            <div class="card-body">
+                <h6>Power of Law</h6>
+                <p class="text-muted small">$20.00</p>
+
+                <button class="btn btn-sm btn-primary w-100 add-to-cart"
+                    data-name="Power of Law"
+                    data-price="20">
+                    Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+    <!-- Discount Books -->
+    <h3 class="mt-5">បញ្ចុះតម្លៃ</h3>
+
+<div class="row g-3 mt-2">
+
+    <!-- 1 -->
+    <div class="col-6 col-md-3">
+        <div class="card h-100">
+            <img height="400px" src="assets/image/menuBook/mathbasic.jpeg" class="card-img-top">
+            <div class="card-body">
+                <h6>Math Basics</h6>
+                <p class="text-danger small">$5.00</p>
+
+                <button class="btn btn-sm btn-outline-primary w-100 add-to-cart"
+                    data-name="Math Basics"
+                    data-price="5">
+                    Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="col-6 col-md-3">
+        <div class="card h-100">
+            <img src="assets/image/menuBook/kidstory.jpeg" class="card-img-top">
+            <div class="card-body">
+                <h6>Kids Story</h6>
+                <p class="text-danger small">$4.00</p>
+
+                <button class="btn btn-sm btn-outline-primary w-100 add-to-cart"
+                    data-name="Kids Story"
+                    data-price="4">
+                    Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="col-6 col-md-3">
+        <div class="card h-100">
+            <img height="400px" src="assets/image/menuBook/scienceforkids.jpeg" class="card-img-top">
+            <div class="card-body">
+                <h6>Science for Kids</h6>
+                <p class="text-danger small">$6.00</p>
+
+                <button class="btn btn-sm btn-outline-primary w-100 add-to-cart"
+                    data-name="Science for Kids"
+                    data-price="6">
+                    Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="col-6 col-md-3">
+        <div class="card h-100">
+            <img height="400px" src="assets/image/menuBook/drawingbook.jpeg" class="card-img-top">
+            <div class="card-body">
+                <h6>Drawing Book</h6>
+                <p class="text-danger small">$3.50</p>
+
+                <button class="btn btn-sm btn-outline-primary w-100 add-to-cart"
+                    data-name="Drawing Book"
+                    data-price="3.5">
+                    Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <!-- Ads -->
+    <h3 class="mt-5 ">ពាណិជ្ជកម្ម</h3>
+   <div class="row mt-3">
+    <div class="col-6 card">
+        <img height="400px" src="assets/image/menuBook/ads.jpeg"class="category-img">
+    </div>
+    <div class="col-6 card">
+        <img height="400px" src="assets/image/menuBook/ads2.jpeg" class="category-img">
+    </div>
+</div>
+
+</div>
+
+<!-- HISTORY + AUTHORS SECTION -->
+<section class="container py-5 mt-5">
+
+  <!-- TITLE -->
+  <div class="text-center mb-5">
+    <h2 class="fw-bold" style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">📖 History of Books & Famous Authors</h2>
+    <p class="text-muted" style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">
+      Writers who shaped literature and inspired millions around the world
+    </p>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="p-4 bg-gradient rounded shadow-sm mb-5 " style="font-family: 'Courier New', Courier, monospace;">
+    <p>
+      Books have been a major source of knowledge for thousands of years.
+      From handwritten manuscripts to modern digital publishing, literature continues
+      to influence education, culture, and society.
+    </p>
+  </div>
+
+  <!-- AUTHORS GRID -->
+  <div class="row g-4">
+
+    <!-- 1 -->
+    <div class="col-6 col-md-3">
+      <div class="card shadow-sm text-center">
+        <img src="assets/image/Authors/agatha.jpeg" class="card-img-top" style="height:200px; object-fit:cover;">
+        <div class="card-body">
+          <h6>William Shakespeare</h6>
+          <p class="small text-muted">Poet & Playwright</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="col-6 col-md-3">
+      <div class="card shadow-sm text-center">
+        <img  src="assets/image/Authors/j.jpeg" class="card-img-top" style="height:200px; object-fit:cover;">
+        <div class="card-body">
+          <h6>J.K. Rowling</h6>
+          <p class="small text-muted">Harry Potter</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="col-6 col-md-3">
+      <div class="card shadow-sm text-center">
+        <img src="assets/image/Authors/g.jpeg" class="card-img-top" style="height:200px; object-fit:cover;">
+        <div class="card-body">
+          <h6>George Orwell</h6>
+          <p class="small text-muted">1984 Author</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="col-6 col-md-3">
+      <div class="card shadow-sm text-center">
+        <img src="assets/image/Authors/m.jpeg" class="card-img-top" style="height:200px; object-fit:cover;">
+        <div class="card-body">
+          <h6>Mark Twain</h6>
+          <p class="small text-muted">Adventure Writer</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="col-6 col-md-3">
+      <div class="card shadow-sm text-center">
+        <img src="assets/image/Authors/n.jpeg" class="card-img-top" style="height:280px;  object-fit:cover;">
+        <div class="card-body">
+          <h6>Jane Austen</h6>
+          <p class="small text-muted">Romance Novelist</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="col-6 col-md-3">
+      <div class="card shadow-sm text-center">
+        <img src="assets/image/Authors/l.jpeg" class="card-img-top" style="height:280px; object-fit:cover;">
+        <div class="card-body">
+          <h6>Leo Tolstoy</h6>
+          <p class="small text-muted">War & Peace</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7 -->
+    <div class="col-6 col-md-3">
+      <div class="card shadow-sm text-center">
+        <img src="assets/image/Authors/ernes.jpeg" class="card-img-top" style="height:280px; object-fit:cover;">
+        <div class="card-body">
+          <h6>Ernest Hemingway</h6>
+          <p class="small text-muted">Modern Literature</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8 -->
+    <div class="col-6 col-md-3">
+      <div class="card shadow-sm text-center">
+        <img src="assets/image/Authors/charles.jpeg" class="card-img-top" style="height:280px; object-fit:cover;">
+        <div class="card-body">
+          <h6>Charles Dickens</h6>
+          <p class="small text-muted">Classic Novels</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9 -->
+    <div class="col-6 col-md-3">
+      <div class="card shadow-sm text-center">
+        <img src="assets/image/Authors/f.jpeg" class="card-img-top" style="height:280px; object-fit:cover;">
+        <div class="card-body">
+          <h6>F. Scott Fitzgerald</h6>
+          <p class="small text-muted">The Great Gatsby</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10 -->
+    <div class="col-6 col-md-3">
+      <div class="card shadow-sm text-center">
+        <img src="assets/image/Authors/s.jpeg" class="card-img-top" style="height:280px; object-fit:cover;">
+        <div class="card-body">
+          <h6>Stephen King</h6>
+          <p class="small text-muted">Horror Master</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 11 (NEW) -->
+    <div class="col-6 col-md-3">
+      <div class="card shadow-sm text-center">
+        <img src="assets/image/Authors/h.jpeg" class="card-img-top" style="height:280px; object-fit:cover;">
+        <div class="card-body">
+          <h6>Haruki Murakami</h6>
+          <p class="small text-muted">Modern Japanese Writer</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 12 (NEW) -->
+    <div class="col-6 col-md-3">
+      <div class="card shadow-sm text-center">
+        <img src="assets/image/Authors/q.jpeg" class="card-img-top" style="height:280px; object-fit:cover;">
+        <div class="card-body">
+          <h6>Agatha Christie</h6>
+          <p class="small text-muted">Mystery Queen</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+<!-- end body -->
+    <!-- End content -->
+     <!-- start footer -->
+    <footer class="bg-primary text-white mt-5">
+    <div class="container py-5">
+        <div class="row">
+
+            <!-- About -->
+            <div class="col-12 col-md-4 mb-4">
+                <h5>Book Store</h5>
+                <p class="small">
+                    We provide a wide range of books including novels, education, and children’s books.
+                    Quality products at affordable prices.
+                </p>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-6 col-md-2 mb-4">
+                <h6>Quick Links</h6>
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-1">
+                        <a href="#" class="nav-link p-0 text-white">Home</a>
+                    </li>
+                    <li class="nav-item mb-1">
+                        <a href="#" class="nav-link p-0 text-white">Shop</a>
+                    </li>
+                    <li class="nav-item mb-1">
+                        <a href="#" class="nav-link p-0 text-white">Categories</a>
+                    </li>
+                    <li class="nav-item mb-1">
+                        <a href="#" class="nav-link p-0 text-white">Contact</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Customer Service -->
+            <div class="col-6 col-md-2 mb-4">
+                <h6>Customer</h6>
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-1">
+                        <a href="#" class="nav-link p-0 text-white">Help Center</a>
+                    </li>
+                    <li class="nav-item mb-1">
+                        <a href="#" class="nav-link p-0 text-white">Returns</a>
+                    </li>
+                    <li class="nav-item mb-1">
+                        <a href="#" class="nav-link p-0 text-white">Order Status</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Map -->
+            <div class="col-12 col-md-4 mb-4">
+                <h6>Our Location</h6>
+                <iframe 
+                    src ="https://www.google.com/maps?q=Western+University+Steung+Mean+Chey&output=embed"
+                    width="100%" 
+                    height="200" 
+                    style="border:0;" 
+                    loading="lazy">
+                </iframe>
+            </div>
+
+        </div>
+
+        <!-- Bottom -->
+        <div class="d-flex flex-column flex-md-row justify-content-between border-top pt-3">
+            <p class="mb-2 mb-md-0 small">© 2026 Book Store. All rights reserved.</p>
+
+            <div>
+                <a href="#" class="text-white me-3">Facebook</a>
+                <a href="#" class="text-white">Instagram</a>
+            </div>
+        </div>
+    </div>
+    
+</footer>
+    </div>
+    </div>
+   
+    <!-- End footer -->
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+     <script src="assets/js/java.js"></script>
+</body>
+</html>

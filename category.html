@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Book Store</title>
+ 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="assets/css/custom.css">
+<style>
+body {
+  background: #f8f9fa;
+}
+
+/* Cart */
+#cartBox {
+  position: fixed;
+  right: -350px;
+  top: 0;
+  width: 320px;
+  height: 100%;
+  background: #fff;
+  border-left: 1px solid #ddd;
+  padding: 15px;
+  overflow-y: auto;
+  transition: 0.3s;
+  z-index: 9999;
+}
+
+/* Card hover */
+.card:hover {
+  transform: translateY(-5px);
+  transition: 0.3s;
+}
+
+/* Button style */
+.btn-dark {
+  border-radius: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg bg-white shadow-sm fixed-top">
+<div class="container">
+
+<a class="navbar-brand fw-bold">📚 Book Store</a>
+ 
+<div class="container text-center">
+
+    <button class="btn btn-outline-primary m-1" onclick="filterBooks('all')">All</button>
+    <button class="btn btn-outline-primary m-1" onclick="filterBooks('education')">Education</button>
+    <button class="btn btn-outline-primary m-1" onclick="filterBooks('novel')">Novel</button>
+    <button class="btn btn-outline-primary m-1" onclick="filterBooks('technology')">Technology</button>
+    <button class="btn btn-outline-primary m-1" onclick="filterBooks('business')">Business</button>
+    <button class="btn btn-outline-primary m-1" onclick="filterBooks('kids')">Kids</button>
+    <a href="index.html" class="btn btn-outline-danger btn-sm">
+            Back Home
+        </a>
+
+  </div>
+  
+<div class="ms-auto">
+<button class="btn btn-warning position-relative" onclick="toggleCart()">
+🛒
+<span id="cart-count"
+class="position-absolute top-0 start-100 translate-middle badge bg-danger">
+0
+</span>
+
+</button>
+
+</div>
+
+</div>
+</nav>
+
+<!-- CATEGORY MENU (FIXED POSITION UNDER NAVBAR) -->
+<div class="bg-primary-subtle  " style="margin-top:30px;">
+  <h1 class="text-center " style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Welcme to my BookStore</h1>
+</div>
+
+<!-- ================= CART PANEL ================= -->
+<div id="cartBox" style="
+position: fixed;
+right: -350px;
+top: 0;
+width: 320px;
+height: 100%;
+background: #fff;
+border-left: 1px solid #ddd;
+padding: 15px;
+overflow-y: auto;
+transition: 0.3s;
+z-index: 9999;
+">
+
+<!-- Close -->
+<button onclick="toggleCart()" style="
+position: absolute;
+top: 10px;
+right: 10px;
+border: none;
+background: transparent;
+font-size: 20px;
+cursor: pointer;">
+✖
+</button>
+
+<h5>🛒 Your Cart</h5>
+
+<div id="cartItems"></div>
+
+<hr>
+
+<h6>Total: $<span id="cartTotal">0</span></h6>
+
+<button class="btn btn-success w-100 mt-2" onclick="checkout()">
+Buy Now
+</button>
+
+</div>
+
+<!-- ================= QR PAYMENT MODAL ================= -->
+<div class="modal fade" id="qrModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Payment Checkout</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body text-center">
+
+        <p class="mb-2">Scan QR to complete payment</p>
+
+        <img src="assets/image/logo/qr.jpg" style="width: 220px;" />
+
+        <hr>
+
+        <h6>Total Amount</h6>
+        <h4 class="text-success">$<span id="finalAmount">0</span></h4>
+
+        <div id="paymentStatus" class="mt-2 text-warning">
+          ⏳ Pending payment
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-success" onclick="checkPaymentStatus()">
+          I've Paid
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+  
+</div>
+<!-- CONTENT -->
+<div class="container mt-4">
+
+<!-- EDUCATION -->
+<h4 class="mb-3">Education Books</h4>
+<div class="row g-4">
+
+<div class="col-4 col-md-2 book-item" data-category="education">
+<div class="card h-100 shadow-sm border-0">
+<img src="assets/image/educationbooks/sl.jpg"class="card-img-top">
+<div class="card-body text-center">
+<h6>Basic Mathematics</h6>
+<p class="text-danger fw-bold">$45</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="Basic Mathematics"
+data-price="45">Add to Cart</button>
+</div>
+</div>
+</div>
+
+<div class="col-4 col-md-2 book-item" data-category="education">
+<div class="card h-100 shadow-sm border-0">
+<img src="assets/image/educationbooks/english.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>English Grammar</h6>
+<p class="text-danger fw-bold">$50</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="English Grammar"
+data-price="50">Add to Cart</button>
+</div>
+</div>
+</div>
+<div class="col-4 col-md-2 book-item" data-category="education">
+<div class="card h-100 shadow-sm border-0">
+<img  src="assets/image/educationbooks/khmer.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>Khmer Books</h6>
+<p class="text-danger fw-bold">$40</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="Khmer Books"
+data-price="40">Add to Cart</button>
+</div>
+</div>
+</div>
+<div class="col-4 col-md-2 book-item" data-category="education">
+<div class="card h-100 shadow-sm border-0">
+<img  src="assets/image/educationbooks/physics.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>Physic</h6>
+<p class="text-danger fw-bold">$24</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="Physic"
+data-price="24">Add to Cart</button>
+</div>
+</div>
+</div>
+<div class="col-4 col-md-2 book-item" data-category="education">
+<div class="card h-100 shadow-sm border-0">
+<img src="assets/image/educationbooks/bio.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>Biologis</h6>
+<p class="text-danger fw-bold">$25</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="Biologis"
+data-price="25">Add to Cart</button>
+</div>
+</div>
+</div>
+<div class="col-4 col-md-2 book-item" data-category="education">
+<div class="card h-100 shadow-sm border-0">
+<img  src="assets/image/educationbooks/chemis.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>Chemistry</h6>
+<p class="text-danger fw-bold">$20</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="Chemistry"
+data-price="20">Add to Cart</button>
+</div>
+</div>
+</div>
+
+</div>
+
+<!-- NOVEL -->
+<h4 class="mt-5 mb-3">Novel Books</h4>
+<div class="row g-4">
+
+<div class="col-4 col-md-2 book-item" data-category="novel">
+<div class="card h-100 shadow-sm border-0">
+<img src="assets/image/novelbooks/img1.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>Love Story</h6>
+<p class="text-danger fw-bold">$50</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="Love Story"
+data-price="50">Add to Cart</button>
+</div>
+</div>
+</div>
+
+<div class="col-4 col-md-2 book-item" data-category="novel">
+<div class="card h-100 shadow-sm border-0">
+<img src="assets/image/novelbooks/img2.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>Adventure Life</h6>
+<p class="text-danger fw-bold">$35</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="Adventure Life"
+data-price="35">Add to Cart</button>
+</div>
+</div>
+</div>
+<div class="col-4 col-md-2 book-item" data-category="novel">
+<div class="card h-100 shadow-sm border-0">
+<img src="assets/image/novelbooks/img3.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>Traveling Life</h6>
+<p class="text-danger fw-bold">$30</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="Traveling Life"
+data-price="30">Add to Cart</button>
+</div>
+</div>
+</div>
+<div class="col-4 col-md-2 book-item" data-category="novel">
+<div class="card h-100 shadow-sm border-0">
+<img src="assets/image/novelbooks/img4.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>History of Kingdom</h6>
+<p class="text-danger fw-bold">$20</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="History of Kingdom"
+data-price="20">Add to Cart</button>
+</div>
+</div>
+</div>
+<div class="col-4 col-md-2 book-item" data-category="novel">
+<div class="card h-100 shadow-sm border-0">
+<img src="assets/image/novelbooks/img5.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>Narrativ Story</h6>
+<p class="text-danger fw-bold">$19</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="Narrativ Story"
+data-price="19">Add to Cart</button>
+</div>
+</div>
+</div>
+<div class="col-4 col-md-2 book-item" data-category="novel">
+<div class="card h-100 shadow-sm border-0">
+<img src="assets/image/novelbooks/img6.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>Harry poter</h6>
+<p class="text-danger fw-bold">$90</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="Harry poter"
+data-price="90">Add to Cart</button>
+</div>
+</div>
+</div>
+
+</div>
+
+<!-- TECHNOLOGY -->
+<h4 class="mt-5 mb-3">Technology Books</h4>
+<div class="row g-4">
+
+<div class="col-4 col-md-2 book-item" data-category="technology">
+<div class="card h-100 shadow-sm border-0">
+<img src="assets/image/technologybooks/img1.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>HTML & CSS</h6>
+<p class="text-danger fw-bold">$15</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="HTML & CSS"
+data-price="15">Add to Cart</button>
+</div>
+</div>
+</div>
+
+<div class="col-4 col-md-2 book-item" data-category="technology">
+<div class="card h-100 shadow-sm border-0">
+<img src="assets/image/technologybooks/img2.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>JavaScript Guide</h6>
+<p class="text-danger fw-bold">$18</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="JavaScript Guide"
+data-price="18">Add to Cart</button>
+</div>
+</div>
+</div>
+<div class="col-4 col-md-2 book-item" data-category="technology">
+<div class="card h-100 shadow-sm border-0">
+<img src="assets/image/technologybooks/img3.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>Python</h6>
+<p class="text-danger fw-bold">$30</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="Python"
+data-price="30">Add to Cart</button>
+</div>
+</div>
+</div>
+<div class="col-4 col-md-2 book-item" data-category="technology">
+<div class="card h-100 shadow-sm border-0">
+<img  src="assets/image/technologybooks/img4.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>Boostrap</h6>
+<p class="text-danger fw-bold">$10</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="Boostrap"
+data-price="10">Add to Cart</button>
+</div>
+</div>
+</div>
+<div class="col-4 col-md-2 book-item" data-category="technology">
+<div class="card h-100 shadow-sm border-0">
+<img  src="assets/image/technologybooks/img5.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>Tailwin</h6>
+<p class="text-danger fw-bold">$10</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="Tailwin"
+data-price="10">Add to Cart</button>
+</div>
+</div>
+</div>
+
+<div class="col-4 col-md-2 book-item" data-category="technology">
+<div class="card h-100 shadow-sm border-0">
+<img  src="assets/image/technologybooks/img6.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>React.js</h6>
+<p class="text-danger fw-bold">$38</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="React.js"
+data-price="38">Add to Cart</button>
+</div>
+</div>
+</div>
+<!-- Business -->
+<h4 class="mt-5 mb-3">Business Books</h4>
+<div class="row g-4">
+
+<div class="col-4 col-md-2 book-item" data-category="business">
+<div class="card h-100 shadow-sm border-0">
+<img  src="assets/image/businessbook/strategy.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>Strategy of hard work</h6>
+<p class="text-danger fw-bold">$19</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="Strategy of hard work"
+data-price="19">Add to Cart</button>
+</div>
+</div>
+</div>
+
+<div class="col-4 col-md-2 book-item" data-category="business">
+<div class="card h-100 shadow-sm border-0">
+<img  src="assets/image/businessbook/getting.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>Getting Rich</h6>
+<p class="text-danger fw-bold">$25</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="Getting Rich"
+data-price="25">Add to Cart</button>
+</div>
+</div>
+</div>
+<div class="col-4 col-md-2 book-item" data-category="business"class="card-img-top">
+<div class="card h-100 shadow-sm border-0">
+<img src="assets/image/businessbook/build.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>Build Financial</h6>
+<p class="text-danger fw-bold">$30</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="Build Financial"
+data-price="30">Add to Cart</button>
+</div>
+</div>
+</div>
+<div class="col-4 col-md-2 book-item" data-category="business">
+<div class="card h-100 shadow-sm border-0">
+<img src="assets/image/businessbook/manage.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>Manage income</h6>
+<p class="text-danger fw-bold">$15</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="Manage income"
+data-price="15">Add to Cart</button>
+</div>
+</div>
+</div>
+<div class="col-4 col-md-2 book-item" data-category="business">
+<div class="card h-100 shadow-sm border-0">
+<img src="assets/image/businessbook/trading.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>Trading Analys</h6>
+<p class="text-danger fw-bold">$34</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="Trading Analys"
+data-price="34">Add to Cart</button>
+</div>
+</div>
+</div>
+<div class="col-4 col-md-2 book-item" data-category="business">
+<div class="card h-100 shadow-sm border-0">
+<img src="assets/image/businessbook/become.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>Become success of Business</h6>
+<p class="text-danger fw-bold">$35</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="Become success of Business"
+data-price="35">Add to Cart</button>
+</div>
+</div>
+</div>
+
+<!-- Kids -->
+<h4 class="mt-5 mb-3">Kids Books</h4>
+<div class="row g-4">
+
+<div class="col-4 col-md-2 book-item" data-category="kids">
+<div class="card h-100 shadow-sm border-0">
+<img src="assets/image/kidsbooks/the.jpeg" class="card-img-top">
+<div class="card-body text-center">
+<h6>The Very Hungry Caterpillar</h6>
+<p class="text-danger fw-bold">$45</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="The Very Hungry Caterpillar"
+data-price="45">Add to Cart</button>
+</div>
+</div>
+</div>
+
+<div class="col-4 col-md-2 book-item" data-category="kids">
+<div class="card h-100 shadow-sm border-0">
+<img src="assets/image/kidsbooks/wild.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>Where the Wild Things Are</h6>
+<p class="text-danger fw-bold">$28</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="Where the Wild Things Are"
+data-price="28">Add to Cart</button>
+</div>
+</div>
+</div>
+<div class="col-4 col-md-2 book-item" data-category="kids">
+<div class="card h-100 shadow-sm border-0">
+<img  src="assets/image/kidsbooks/web.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>Charlotte's Web</h6>
+<p class="text-danger fw-bold">$20</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="Charlotte's Web"
+data-price="20">Add to Cart</button>
+</div>
+</div>
+</div>
+
+
+<div class="col-4 col-md-2 book-item" data-category="kids">
+<div class="card h-100 shadow-sm border-0">
+<img  src="assets/image/kidsbooks/tom.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>Tom and Jerry</h6>
+<p class="text-danger fw-bold">$58</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="Tom and Jerry"
+data-price="58">Add to Cart</button>
+</div>
+</div>
+</div>
+
+<div class="col-4 col-md-2 book-item" data-category="kids">
+<div class="card h-100 shadow-sm border-0">
+<img  src="assets/image/kidsbooks/matilda.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>Matilda</h6>
+<p class="text-danger fw-bold">$38</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="Matilda"
+data-price="38">Add to Cart</button>
+</div>
+</div>
+</div>
+
+<div class="col-4 col-md-2 book-item" data-category="kids">
+<div class="card h-100 shadow-sm border-0">
+<img  src="assets/image/kidsbooks/moon.jpeg"class="card-img-top">
+<div class="card-body text-center">
+<h6>Goodnight Moon</h6>
+<p class="text-danger fw-bold">$38</p>
+<button class="btn btn-dark w-100 add-to-cart"
+data-name="Goodnight Moon"
+data-price="38">Add to Cart</button>
+</div>
+</div>
+</div>
+
+</div>
+
+</div>
+
+<!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+     <script src="assets/js/java.js"></script>
+
+</body>
+</html>

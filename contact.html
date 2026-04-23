@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us - BookStore</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="assets/css/custom.css">
+<style>
+
+body{
+    background: linear-gradient(-45deg,#eef2f7,#dfe9f3,#f3e7ff,#e0f7ff);
+    background-size: 400% 400%;
+    animation: bgMove 12s ease infinite;
+    font-family: Arial, sans-serif;
+}
+
+@keyframes bgMove{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
+/* TOP BAR ANIMATION */
+.top-bar{
+    background: linear-gradient(90deg,#0d6efd,#6610f2,#0d6efd);
+    background-size: 200% 200%;
+    animation: slideBar 6s ease infinite;
+    color:white;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+@keyframes slideBar{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
+/* FLOATING 3D CARD */
+.card-3d{
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(10px);
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    transform: perspective(1000px) rotateX(2deg);
+    transition: 0.3s ease;
+    animation: floatCard 4s ease-in-out infinite;
+}
+
+@keyframes floatCard{
+    0%{transform: translateY(0px) rotateX(2deg)}
+    50%{transform: translateY(-10px) rotateX(0deg)}
+    100%{transform: translateY(0px) rotateX(2deg)}
+}
+
+.card-3d:hover{
+    transform: perspective(1000px) rotateX(0deg) translateY(-8px) scale(1.01);
+    box-shadow: 0 18px 35px rgba(0,0,0,0.25);
+}
+
+/* BUTTON ANIMATION */
+.btn-modern{
+    background: linear-gradient(90deg,#ff6a00,#ff8c00);
+    color:white;
+    border:none;
+    font-weight:bold;
+    transition: 0.3s;
+    animation: glowBtn 2.5s infinite;
+}
+
+@keyframes glowBtn{
+    0%{box-shadow:0 0 5px #ff6a00}
+    50%{box-shadow:0 0 20px #ff8c00}
+    100%{box-shadow:0 0 5px #ff6a00}
+}
+
+.btn-modern:hover{
+    transform: scale(1.05);
+}
+
+.small-text{
+    font-size: 14px;
+    color:#6c757d;
+}
+
+/* INPUT */
+.form-control{
+    border-radius: 10px;
+    transition: 0.2s;
+}
+
+.form-control:focus{
+    box-shadow: 0 0 10px rgba(13,110,253,0.3);
+    border-color: #0d6efd;
+}
+
+/* MAP */
+iframe{
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    animation: mapPulse 6s infinite;
+}
+
+@keyframes mapPulse{
+    0%{transform: scale(1)}
+    50%{transform: scale(1.01)}
+    100%{transform: scale(1)}
+}
+
+footer{
+    background: linear-gradient(90deg,#111,#222);
+    animation: footerGlow 5s infinite;
+}
+
+@keyframes footerGlow{
+    0%{box-shadow:0 0 0px #000}
+    50%{box-shadow:0 -5px 20px rgba(255,255,255,0.1)}
+    100%{box-shadow:0 0 0px #000}
+}
+
+</style>
+
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar text-center py-2 fixed-top">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div>
+            📚 BookStore Support Center — We reply within 24 hours
+        </div>
+        <a href="index.html" class="btn btn-outline-light btn-sm">Back Home</a>
+    </div>
+</div>
+
+
+<!-- MAIN -->
+<div class="container py-5 mt-5">
+
+    <div class="row g-4">
+
+        <!-- FORM -->
+        <div class="col-md-7">
+            <div class="card-3d">
+
+                <h3 class="fw-bold mb-2">💬 Contact Us</h3>
+                <p class="small-text">Student project contact page with cool infinite animations.</p>
+
+                <form>
+
+                    <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" placeholder="Your name">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" placeholder="example@gmail.com">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Subject</label>
+                        <input type="text" class="form-control" placeholder="Subject">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Message</label>
+                        <textarea class="form-control" rows="5" placeholder="Write your message..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-modern w-100">
+                        Send Message
+                    </button>
+
+                </form>
+
+            </div>
+        </div>
+
+
+        <!-- SIDE INFO -->
+        <div class="col-md-5">
+
+            <div class="card-3d mb-4">
+                <h5 class="fw-bold">📞 Support Info</h5>
+                <p class="small-text">We are always ready to help students and customers.</p>
+                <hr>
+                <p>📧 support@bookstore.com</p>
+                <p>📞 +855 97 932 5907</p>
+                <p>⏰ 8:00 AM - 8:00 PM</p>
+            </div>
+
+            <div class="card-3d">
+                <h5 class="fw-bold">⭐ Services</h5>
+                <ul class="small-text">
+                    <li>Fast reply support</li>
+                    <li>Order help</li>
+                    <li>Delivery tracking</li>
+                    <li>Refund support</li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<!-- MAP -->
+<div class="container mb-5">
+    <div class="card-3d text-center">
+        <h5 class="fw-bold text-primary">📍 Our Location</h5>
+        <p class="small-text">Western University, Steung Mean Chey, Phnom Penh</p>
+
+        <iframe
+            src="https://www.google.com/maps?q=Western+University+Steung+Mean+Chey&output=embed"
+            width="100%"
+            height="350"
+            loading="lazy">
+        </iframe>
+    </div>
+</div>
+
+
+<footer class="text-white text-center py-3">
+    <p class="mb-0">© 2026 BookStore | Student Project Design</p>
+</footer>
+
+</body>
+</html>
